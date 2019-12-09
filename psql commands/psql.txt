@@ -1,0 +1,399 @@
+\l //for knowing all the databases created
+
+\q //quit
+
+\h //help
+
+CREATE DATABASE test; //command to create a database
+
+psql -h localhost -p 5432 -U postgres test \\connect to database
+
+\c test //changing from one database to another
+
+DROP DATABASE test; //delete a database ,with all its content.
+
+CREATE TABLE person (
+test(# id INT,
+test(# first_name VARCHAR(50),
+test(# last_name VARCHAR(50),
+test(# gender VARCHAR(7),
+test(# date_of_birth DATE ); ////create a  TABLE
+
+\d person //table view
+
+DROP TABLE person; //drop a TABLE
+
+\d //database view
+
+CREATE TABLE person(
+test(# id BIGSERIAL NOT NULL PRIMARY KEY,
+test(# first_name VARCHAR(50) NOT NULL,
+test(# last_name VARCHAR(50) NOT NULL,
+test(# gender VARCHAR(7) NOT NULL,
+test(# date_of_birth DATE NOT NULL,
+test(# email VARCHAR(150) ); // creating table with not null fields
+
+INSERT INTO person(first_name, last_name, gender, date_of_birth)
+test-# VALUES ('Anne', 'Smith', 'FEMALE', date '1988-01-09'); //inserting data into the table person
+
+SELECT * FROM person; //display the table content
+
+\dt //display the tables
+
+\i D:/person.sql //execute command from file
+
+SELECT first_name FROM person; //display the specific field of table
+
+SELECT * FROM person ORDER BY country_of_birth; // by default it sort in ascending ORDER
+SELECT * FROM person ORDER BY country_of_birth ASC ;
+
+SELECT * FROM person ORDER BY id DESC ;//sort in descending ORDER
+
+SELECT * FROM person ORDER BY first_name;
+
+SELECT * FROM person ORDER BY first_name DESC;
+
+SELECT * FROM person ORDER BY id , email; //sort data with two columns
+
+SELECT * FROM person ORDER BY date_of_birth DESC;
+
+SELECT * FROM person ORDER BY date_of_birth;
+
+SELECT country_of_birth FROM person ORDER BY country_of_birth;
+
+SELECT DISTINCT country_of_birth FROM person ORDER BY country_of_birth; // show only unique values remove duplicate
+
+SELECT * FROM person WHERE gender = 'Female';//applying filter using where clause
+
+SELECT * FROM person WHERE gender = 'Male' AND country_of_birth='Poland';// multiple filters
+
+SELECT * FROM person WHERE gender = 'Male' AND (country_of_birth='Poland' OR country_of_birth='China');
+
+SELECT * FROM person WHERE gender = 'Male' AND (country_of_birth='Poland' OR country_of_birth='China') AND last_name='Pietersma';
+
+SELECT * FROM person WHERE gender = 'Female' AND (country_of_birth='Poland' OR country_of_birth='China') AND last_name='Pietersma';
+
+//comparison
+
+SELECT 1=1;
+
+SELECT 1=2;
+
+SELECT 1<2;
+
+SELECT 1<=2;
+
+SELECT 1<=1;
+
+SELECT 1>=1;
+
+SELECT 1>=2;
+
+SELECT 1<>2; // not equal to
+
+SELECT 1<>1;
+
+SELECT * FROM person LIMIT 10; // shows only first 10 rows
+
+SELECT * FROM person LIMIT 5;
+
+SELECT * FROM person OFFSET 5 LIMIT 5;//offsets and then print 5 rows
+
+SELECT * FROM person OFFSET 5; // form 6 till end
+
+SELECT * FROM person OFFSET 5 FETCH FIRST 5 ROW ONLY;
+
+SELECT * FROM person OFFSET 5 FETCH FIRST 1 ROW ONLY;
+
+SELECT * FROM person WHERE country_of_birth='China' OR country_of_birth='
+France' OR country_of_birth='Brazil';
+
+SELECT * FROM person WHERE country_of_birth IN ('China','
+France','Brazil');
+
+SELECT * FROM person WHERE date_of_birth BETWEEN DATE '2000-01-01' AND '2015-01-01';//select data from range
+
+SELECT * FROM person WHERE email LIKE '%.com'; //match pattern
+
+SELECT * FROM person WHERE email LIKE '%bloomberg.com';
+
+SELECT * FROM person WHERE email LIKE '%google.com';
+
+SELECT * FROM person WHERE email LIKE '%google.%';
+
+SELECT * FROM person WHERE email LIKE '________@%';
+
+SELECT * FROM person WHERE email LIKE '_____o@%';
+
+SELECT * FROM person WHERE email LIKE '_____h@%';
+
+SELECT * FROM person WHERE country_of_birth LIKE 'p%';
+
+SELECT * FROM person WHERE country_of_birth LIKE 'P%';
+
+SELECT * FROM person WHERE country_of_birth ILIKE 'p%'; //case sensitive
+
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth;
+
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth ORDER BY country_of_birth;
+
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING COUNT(*)>5 ORDER BY country_of_birth;//having works with group by adds extra filtering
+
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING COUNT(*)>40 ORDER BY country_of_birth;
+
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING COUNT(*)<=180 ORDER BY country_of_birth;
+
+\i D:/car.sql
+
+SELECT * FROM car;
+
+SELECT MAX(price) FROM car;
+
+SELECT MIN(price) FROM car;
+
+SELECT AVG(price) FROM car;
+
+SELECT ROUND(AVG(price)) FROM car;
+
+SELECT make, modl, MIN(price) FROM car GROUP BY make, modl;
+
+SELECT make, MIN(price) FROM car GROUP BY make;
+
+SELECT SUM(price) FROM car;
+
+SELECT make, SUM(price) FROM car GROUP BY make;
+
+// arithmetic operator
+
+SELECT 10+2;
+
+SELECT 10*2;
+
+SELECT 10/2;
+
+SELECT 10-2;
+
+SELECT 10^2;
+SELECT 10^3;
+
+SELECT 5!; // factorial of a number
+
+SELECT 10%3; //modulo operator
+
+SELECT 10%4;
+
+SELECT * FROM car;
+
+SELECT id, make, modl, price, price*.10 FROM car;
+
+SELECT id, make, modl, price, ROUND(price*.10,2) FROM car;
+
+SELECT id, make, modl, price, ROUND(price*.10,2), ROUND(price-(price*.10),2) FROM car;
+
+SELECT id, make, modl, price AS original_price, ROUND(price*.10,2) AS ten_percent, ROUND(price-(price*.10),2) AS discount_after_ten_percent FROM car;
+
+// COALESCE
+
+SELECT COALESCE(1);
+
+SELECT COALESCE(1) AS number;
+
+SELECT COALESCE(null, null, 1, 10) AS number; // still returns 1 because it finds the very first value of the given array
+
+SELECT COALESCE(email, 'Email not provided') FROM person;
+
+SELECT 10/0; //throws an error we use nullif
+
+SELECT NULLIF(10, 10); //results null
+
+SELECT NULLIF(10, 1); // results 10
+
+SELECT 10/NULLIF(2, 9);
+
+SELECT 10/NULLIF(0, 0);
+
+SELECT COALESCE(10/NULLIF(0, 0),0);
+
+//timestamp and dates
+
+SELECT NOW(); // gives the current timestamp
+
+SELECT NOW()::TIME;
+
+SELECT NOW()::DATE;
+
+// adding and subtracting from dates
+
+SELECT NOW() - INTERVAL '10 YEARS';
+
+SELECT NOW() - INTERVAL '10 MONTHS';
+
+SELECT NOW() - INTERVAL '10 DAYS';
+
+SELECT NOW()+ INTERVAL '10 DAYS';
+
+SELECT (NOW()+ INTERVAL '10 DAYS')::DATE;
+
+SELECT EXTRACT(YEAR FROM NOW());
+
+SELECT EXTRACT(MONTH FROM NOW());
+
+SELECT EXTRACT(DAY FROM NOW());
+
+SELECT EXTRACT(DOW FROM NOW());
+
+SELECT EXTRACT(CENTURY FROM NOW());
+
+//age function
+
+SELECT first_name, last_name, gender, country_of_birth, date_of_birth, AGE(NOW(), date_of_birth) from person;
+
+//PRIMARY KEY(PK) uniquely identify a record in a table
+
+SELECT * FROM person LIMIT (id);
+
+ALTER TABLE person DROP CONSTRAINT person_pkey;
+
+INSERT INTO person (id, first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES(1, 'Alfreda', 'Beardon','Female', 'abeardon0@is.gd', '1953-10-28', 'Comoros');
+
+SELECT * FROM person WHERE id=1;
+
+//adding PRIMARY KEY
+
+ALTER TABLE person add PRIMARY KEY (id);
+
+DELETE FROM person WHERE id=1;
+
+// unique CONSTRAINT
+
+SELECT email, COUNT(*) FROM person GROUP BY email;
+
+SELECT email, COUNT(*) FROM person GROUP BY email HAVING COUNT(*)>1;
+
+INSERT INTO person ( first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES('Fernanda', 'Beardon','Female', 'abeardon0@is.gd', '1953-10-28', 'Comoros');
+
+SELECT * FROM person WHERE email='abeardon0@is.gd';
+
+ALTER TABLE person ADD CONSTRAINT unique_email_address UNIQUE(email);
+
+DELETE FROM person WHERE id=1004;
+
+ALTER TABLE person DROP CONSTRAINT unique_email_address;
+
+ALTER TABLE person ADD UNIQUE(email);
+
+SELECT DISTINCT gender FROM person;
+
+ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender = 'Female' OR gender ='Male');
+
+DELETE FROM person; //deletes all the rows
+
+DELETE FROM person WHERE id=1011;
+
+DELETE FROM person WHERE gender='Female' AND country_of_birth='England';
+
+DELETE FROM person WHERE gender='Female' AND country_of_birth='Nigeria';
+
+SELECT * FROM person WHERE gender='Male' AND country_of_birth='Nigeria';
+
+DELETE FROM person WHERE gender='Male';
+
+DELETE FROM person;
+
+UPDATE person SET email = 'ammar@gmail.com' WHERE id=511;
+
+SELECT * FROM person WHERE id = 511;
+
+UPDATE person SET first_name = 'Omar', last_name='Montana', email='omar.montana@hotmail.com' WHERE id=511;
+
+SELECT * FROM person WHERE id=517;
+
+INSERT INTO person (id, first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES(517,'Fernanda', 'Beardon','Female', 'abeardon02132@is.gd', '1953-10-28', 'Comoros')
+ON CONFLICT (id) DO NOTHING; //handles the conflicts //coulums must be a UNIQUE or a PRIMARY KEY
+
+INSERT INTO person (id, first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES(517,'Fernanda', 'Beardon','Female', 'abeardon02132@is.gd', '1953-10-28', 'Comoros')
+ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email;
+
+INSERT INTO person (id, first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES(517,'Fernanda', 'Beardon','Female', 'abeardon02132@is.gd', '1953-10-28', 'Comoros')
+ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, last_name=EXCLUDED.last_name, first_name=EXCLUDED.first_name;
+
+//adding relationship BETWEEN tables
+
+\i D:/person-car.sql
+
+SELECT * FROM car;
+SELECT * FROM person;
+
+UPDATE person SET car_id =2 WHERE id=1;
+
+UPDATE person SET car_id =2 WHERE id=2; //throws error
+
+UPDATE person SET car_id =1 WHERE id=2;
+
+//INNER JOINS
+
+SELECT * FROM person
+JOIN car ON person.car_id = car.id;
+
+SELECT person.first_name, car.make, car.model, car.price FROM person
+JOIN car ON person.car_id = car.id; // JOIN == INNER JOIN
+
+\x //expanded display on/ off
+
+//LEFT JOIN
+
+SELECT * FROM person
+LEFT JOIN car ON person.car_id = car.id;
+
+SELECT * FROM person
+LEFT JOIN car ON person.car_id = car.id
+WHERE car.* IS NULL;
+
+INSERT INTO car (id, make, model, price) VALUES(13, 'Mazda', 'RX-8','51272.48');
+
+INSERT INTO person(id, first_name, last_name, gender, email, date_of_birth, country_of_birth) VALUES(9000,'John','Smith','Male',null,'1921-04-03','Finland');
+
+UPDATE person SET car_id =13 WHERE id =9000;
+
+DELETE FROM WHERE id=13; //raises an error as it is a foreign key CONSTRAINT and linked to john
+
+DELETE FROM person WHERE id =9000;
+
+SELECT * FROM person
+LEFT JOIN car ON car.id=person.car_id;
+
+\copy (SELECT * FROM person LEFT JOIN car ON car.id=person.car_id) TO 'D:/results.csv' DELIMITER ',' CSV HEADER;
+
+BIGSERIAL - autoincrement
+
+SELECT * FROM person_id_seq;
+
+SELECT nextval('person_id_seq'::regclass);
+
+ALTER SEQUENCE person_id_seq RESTART WITH 10;
+
+SELECT * FROM pg_available_extensions;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+\df //function of uuid-ossp
+
+SELECT uuid_generate_v4();
+
+\i D:/person-car2.sql
+
+UPDATE person SET car_uid ='65a193bb-af03-4f0b-b608-d17ad2f96d89' WHERE person_uid = '19cfe8b0-79e8-475c-a222-98654a5680cd';
+
+UPDATE person SET car_uid ='f1cadc77-cd6f-4c41-ba33-d167933f9f0e' WHERE person_uid = '517e1e8d-5c5c-45d3-9aa7-6f172f85981b';
+
+SELECT * FROM person
+JOIN car ON person.car_uid = car.car_uid;
+
+SELECT * FROM person
+JOIN car USING(car_uid);
+
+SELECT * FROM person
+LEFT JOIN car USING(car_uid);
+
+SELECT * FROM person
+LEFT JOIN car USING(car_uid) WHERE car.* IS NULL;
